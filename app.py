@@ -6,7 +6,7 @@ import os
 app = Flask(__name__, template_folder='templates')
 
 UPLOAD_FOLDER = 'uploads'
-OUTPUT_FOLDER = 'outputs'
+OUTPUT_FOLDER = os.path.join('static', 'outputs')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -41,12 +41,18 @@ def upload_file():
     return redirect(url_for('index'))
 
 def perform_nlm_denoising(image):
-    # Your NLM denoising logic here (use OpenCV's cv2.fastNlMeansDenoising)
-    # Replace this placeholder function with your actual implementation
-    # For example:
-    # denoised_image = cv2.fastNlMeansDenoising(image, None, h=10)
-    # return denoised_image
-    pass
+    # Check if the input image is not None
+    if image is None:
+        return None
+
+    # Convert the image to grayscale for denoising
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Perform NLM denoising
+    # H defines the filter strength (more =  blurry, less = less filter)
+    denoised_image = cv2.fastNlMeansDenoising(gray_image, None, h=50)
+
+    return denoised_image
 
 if __name__ == '__main__':
     app.run(debug=True)
