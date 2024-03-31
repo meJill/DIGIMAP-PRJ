@@ -32,7 +32,6 @@ def upload_file():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
             img = cv2.imread(filepath)
-            # Apply NLM denoising (you can replace this with your actual NLM denoising function)
             denoised_img = perform_nlm_denoising(img)
             output_filename = 'denoised_' + filename
             output_filepath = os.path.join(app.config['OUTPUT_FOLDER'], output_filename)
@@ -45,10 +44,8 @@ def perform_nlm_denoising(image):
     if image is None:
         return None
 
-    # Convert the image to grayscale for denoising
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # Perform NLM denoising
     # H defines the filter strength (more =  blurry, less = less filter)
     denoised_image = cv2.fastNlMeansDenoising(gray_image, None, h=50)
 
