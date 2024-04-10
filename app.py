@@ -47,7 +47,7 @@ def perform_nlm_denoising(image):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # H defines the filter strength (more =  blurry, less = less filter)
-    denoised_image = cv2.fastNlMeansDenoising(gray_image, None, h=50)
+    denoised_image = cv2.fastNlMeansDenoising(gray_image, None, h=20)
 
     return denoised_image
 
