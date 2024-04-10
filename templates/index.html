@@ -4,12 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Non-local Means Denoising</title>
+    <style>
+        /* Style to display value inline */
+        #h_value_display {
+            display: inline;
+            margin-left: 10px; /* Add some margin for spacing */
+        }
+        #h_value_input {
+            width: 50px; /* Adjust the width of the input field */
+        }
+    </style>
 </head>
 <body>
     <h1>Non-local Means Denoising</h1>
     <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="file">
+        <input type="file" name="file" id="file" onchange="previewImage(event)">
+        <label for="h_value">Value of h:</label>
+        <input type="range" name="h_value_slider" id="h_value_slider" min="0" max="100" step="0.1" value="20" onchange="updateHValue(this.value)">
+        <input type="number" name="h_value_input" id="h_value_input" min="0" step="0.1" value="20" onchange="updateHValue(this.value)">
+        <input type="hidden" name="h_value" id="h_value" value="20">
         <input type="submit" value="Upload">
     </form>
+    <div id="image_preview"></div> 
+
+    <script>
+        // Function to preview the selected image
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            
+            // Closure to handle file reading
+            reader.onload = function() {
+                const img = document.createElement('img');
+                img.src = reader.result;
+                img.style.maxWidth = '100%'; 
+                const imagePreviewDiv = document.getElementById('image_preview');
+                imagePreviewDiv.innerHTML = ''; 
+                imagePreviewDiv.appendChild(img); 
+            };
+            
+            // Read the selected file as a data URL
+            reader.readAsDataURL(file);
+        }
+
+        // Function to update the displayed value of h
+        function updateHValue(value) {
+            const hValueInput = document.getElementById('h_value_input');
+            const hValueSlider = document.getElementById('h_value_slider');
+            const hValueHidden = document.getElementById('h_value'); 
+
+            hValueInput.value = value;
+            hValueSlider.value = value;
+            hValueHidden.value = value; 
+        }
+    </script>
 </body>
 </html>
